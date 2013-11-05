@@ -1,0 +1,51 @@
+div {
+    border: 1px solid grey;
+}
+
+#staff li {
+    list-style: none;
+    overflow: hidden;
+}
+
+#staff img {
+    float: right;
+    
+}
+
+.business-card {
+    width: 100%;
+}
+
+.business-card.li {
+    overflow: auto;
+    height: auto !important;
+}
+
+.business-card h1 {
+    margin-bottom: 0;
+} 
+
+.tags {
+    
+}
+
+ul.tags {
+    padding: 0 0 0.5em 0;
+}
+
+ul.tags li {
+    display: inline;
+    border: 1px solid black;
+    border-radius: 0.5em;
+    margin: 0 0.1em;
+    padding: 0.1em;
+/* cursor: pointer; */
+}
+
+.toggled {
+    background-color: rgba(247, 245, 0, 0.53);
+}
+
+.hidden {
+    display: none;
+}
