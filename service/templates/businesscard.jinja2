@@ -1,0 +1,18 @@
+{{ person }}
+<li id="{{ person.id }}" class="business-card">
+  <div>
+    <img src="{{ person.image_src }}" title="{{ person.name }}" alt="Picture of {{ person.name }}" />
+  </div>
+  <div>
+    <h1>{{ person.name }}</h1>
+    <ul class="tags"><li>Lektor</li><li>VIP</li><li>current employee</li></ul>
+    <address>
+      Niels Bohr Institutet, Is og klima</br>
+      Juliane Maries Vej 30</br>
+      2100 København Ø</br>
+      </br>
+      Kontor: Hovedbygning, 01-3-313</br>
+      Telefon: <a href="tel:+45 353-20590">+45 353-20590</a></br>
+      E-mail: <a href="mailto:{{ person.email }}">{{ person.email }}</a></br>
+  </div>
+</li>

@@ -5,93 +5,32 @@ function toArray(c) {
 
 var staff = document.getElementById('staff');
 var section = staff;
-var filter = [];
 var bcards = document.getElementsByClassName('business-card');
 
-// Remove all current filters from the list of business cards.
-function clearFilters() {
-    for (var b in bcards) {
-        bcards[b].hidden = false;
-    }
-}
+function updateSelection() {
+    selection = toArray(bcards);
 
-// Add a selection filter to the list of business cards
-function addFilter(tag) {
-    for (var ib = 0; ib < bcards.length; ib++) {
-        var found = false;
-        var tagelem = bcards[ib].getElementsByClassName('tags');
-        
-        if (tagelem[0] == undefined)
-            continue;
+    selection.map(function(x) {
+        x.classList.remove('hidden');
+    });
 
-        var tags = tagelem[0].getElementsByTagName('li');
-        for (var it = 0; it < tags.length; it++) {
-            if (tags[it].innerHTML == tag) {
-                console.log(tags[it]);
-                tags[it].classList.toggle('toggled');
-                found = true;
-                break;
+    var filters = document.querySelectorAll('div.filter ul li.toggled');
+    filters = toArray(filters).map(function(x) { return x.innerHTML; });
+
+    for (var i = 0; i < filters.length; i++) {
+        for (var j = 0; j < selection.length; j++) {
+            var tags = selection[j].querySelectorAll('.tags li');
+            tags = toArray(tags);
+            // get tag values
+            tags = tags.map(function(y) { return y.innerHTML; });
+            
+            if (tags.indexOf(filters[i]) == -1) {
+                selection[j].classList.add('hidden');
             }
         }
-
-        if (!found) {
-            bcards[ib].classList.toggle('hidden');
-        }
     }
+   
 }
-
-function removeFilter(tag) {
-    // find all toggled tags
-    var active = toArray(document.querySelectorAll('.business-card.hidden li:not(.toggled)'));
-
-    // filter to matching
-    active = active.filter(function(x) { return x.innerHTML != tag });
-
-    // if current filter, untoggle
-    for (var it=0; it < active.length; it++) {
-        // find parent node
-        var parent = active[it].parentNode;
-        // and see if there are more applied filters
-        console.log(parent.querySelectorAll('.toggled'));
-        if (parent.querySelectorAll('.toggled').length == 0) {
-            // if not, unhide
-            console.log(parent.parentNode.parentNode);
-            parent.parentNode.parentNode.classList.remove('hidden');
-        }
-    }
-
-    // var hidden = toArray(bcards).filter(function(x) { return x.hidden; });
-    
-    // for (var it=0; it < hidden.length; it++) {
-    //     console.log("remove, it: " + it);
-
-    //     var tags = hidden[it].querySelectorAll('li');
-    //     console.log(toArray(tags).map(function(x) { return x.innerHTML;}));
-    //     if (toArray(tags).filter(function(x) { return x.innerHTML == tag; }).length == 0)
-    //         hidden[it].hidden = false;
-    // }
-
-    
-    
-}
-
-// function removeFilter(tag) {
-//     var bcards = document.getElementsByClassName('business-card');
-//     for (var i = 0; i < bcards.length; i++) {
-//         var tagsul = document.getElementsByClassName('tags')[0];
-//         console.log(tagsul);
-//         var tags = tagsul.getElementsByTagName('li');
-//         console.log(tags);
-//         for (var ti = 0; ti < tags.length; ti++) {
-//             console.log(tags[ti].innerHTML);
-//             if (tags[ti].innerHTML == tag) {
-//                 tagsul.parentNode.parentNode.hidden = false;
-//                 break;
-//             }
-//         }
-//     }
-// }
-
 
 // Find out where to place search box
 while (section.nodeName != 'H1')
@@ -113,23 +52,21 @@ for (var i in tagelems) {
         tags[e][1] += 1;
 }
 
-var searchbox = document.createElement('ul');
-searchbox.className = 'tags';
+var searchbox = document.createElement('div');
+var searchul = document.createElement('ul');
+searchbox.className = 'filter';
+searchul.className = 'tags';
+searchbox.appendChild(searchul);
 // Add tags to search box
 for (var i in tags) {
     var e = tags[i];
     var d = document.createElement('li');
     d.innerHTML = e[0];
     d.onclick = function(x) {
-        if (this.classList.toggle('toggled')) {
-            console.log("Toggled!");
-            addFilter(this.innerHTML);
-        } else {
-            console.log("Untoggled!");
-            removeFilter(this.innerHTML);
-        }
+        this.classList.toggle('toggled');
+        updateSelection();
     }
-    searchbox.appendChild(d);
+    searchul.appendChild(d);
 }
 
 // Append searchbox

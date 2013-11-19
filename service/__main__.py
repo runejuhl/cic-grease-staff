@@ -1,0 +1,3 @@
+import staff
+
+staff.run()
