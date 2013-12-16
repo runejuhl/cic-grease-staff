@@ -8,15 +8,15 @@
   </div>
 {% endif %}
   <div>
-    <h1>{{ person.name }}</h1>
-    <ul class="tags">{% for tag in person.tags %}<li>{{ tag.name }}</li>{% endfor %}</ul>
+    <h1><a href="http://www.isogklima.nbi.ku.dk/ansatte/?id={{ person.kuid }}&vis=medarbejder">{{ person.name }}</a></h1>
+    <ul class="tags">{% for tag in person.tags|split %}<li>{{ tag }}</li>{% endfor %}</ul>
     <address>
       Niels Bohr Institutet, Is og klima<br>
       Juliane Maries Vej 30<br>
       2100 København Ø<br>
       <br>
       Kontor: {{ person.room }}<br>
-      Telefon: <a href="tel:+45 {{ person.phone }}">+45 {{ person.phone }}</a><br>
+      Telefon: <a href="tel:{{ person.phone }}">{{ person.phone }}</a><br>
       E-mail: <a href="mailto:{{ person.email }}">{{ person.email }}</a>
     </address>        
   </div>
