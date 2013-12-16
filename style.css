@@ -1,6 +1,6 @@
-/* div { */
-/*     border: 1px solid grey; */
-/* } */
+#staff li {
+    border: 1px solid grey;
+}
 
 #staff li {
     list-style: none;
@@ -48,4 +48,13 @@ ul.tags li {
 
 .hidden {
     display: none;
+}
+
+.edit {
+    background: #ff8;
+}
+
+.editable {
+/* should show an indicator that the item is editable */
+    
 }

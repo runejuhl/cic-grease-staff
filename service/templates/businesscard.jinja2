@@ -1,18 +1,25 @@
-{{ person }}
+{% extends "mockup.jinja2" %}
+{% block content %}
+{% for person in persons %}
 <li id="{{ person.id }}" class="business-card">
-  <div>
+{% if person.image_src %}
+  <div>    
     <img src="{{ person.image_src }}" title="{{ person.name }}" alt="Picture of {{ person.name }}" />
   </div>
+{% endif %}
   <div>
     <h1>{{ person.name }}</h1>
     <ul class="tags">{% for tag in person.tags %}<li>{{ tag.name }}</li>{% endfor %}</ul>
     <address>
-      Niels Bohr Institutet, Is og klima</br>
-      Juliane Maries Vej 30</br>
-      2100 København Ø</br>
-      </br>
-      Kontor: Hovedbygning, 01-3-313</br>
-      Telefon: <a href="tel:+45 353-20590">+45 353-20590</a></br>
-      E-mail: <a href="mailto:{{ person.email }}">{{ person.email }}</a></br>
+      Niels Bohr Institutet, Is og klima<br>
+      Juliane Maries Vej 30<br>
+      2100 København Ø<br>
+      <br>
+      Kontor: {{ person.room }}<br>
+      Telefon: <a href="tel:+45 {{ person.phone }}">+45 {{ person.phone }}</a><br>
+      E-mail: <a href="mailto:{{ person.email }}">{{ person.email }}</a>
+    </address>        
   </div>
 </li>
+{% endfor %}
+{% endblock %}

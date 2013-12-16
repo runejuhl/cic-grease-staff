@@ -1,3 +1,10 @@
+
+
+var staff = $.('#staff');
+
+
+// ---------------------------------------------
+
 // Convert an object to an array
 function toArray(c) {
     return [].slice.call(c, 0);
