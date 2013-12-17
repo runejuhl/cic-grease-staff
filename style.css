@@ -13,12 +13,11 @@
 }
 
 .business-card {
-    width: 100%;
 }
 
-.business-card.li {
-    overflow: auto;
-    height: auto !important;
+li.business-card {
+    padding: 1em;
+    border-bottom: 1px solid #ccc;
 }
 
 .business-card h1 {
