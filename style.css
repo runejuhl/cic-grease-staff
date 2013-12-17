@@ -5,11 +5,22 @@
 #staff li {
     list-style: none;
     overflow: hidden;
+    line-height: 1em;
+    display: inline;
+}
+
+.filter ul.tags {
+    padding: 0;
+}
+
+.filter ul.tags li {
+    padding-left: 1em;
 }
 
 #staff img {
     float: right;
-    
+    max-height: 12em;
+    width: auto;
 }
 
 .business-card {
@@ -28,12 +39,11 @@ li.business-card {
     
 }
 
-ul.tags {
+.business-card ul.tags {
     padding: 0 0 0.5em 0;
 }
 
-ul.tags li {
-    display: inline;
+.business-card ul.tags li {
     border: 1px solid black;
     border-radius: 0.5em;
     margin: 0 0.1em;
