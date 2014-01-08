@@ -17,29 +17,27 @@ for (var i = 0; i < tmptags.length; i++)
         tags.push(tmptags[i])
 
 // Create the tag selection box
-var searchbox = $('<div class="filter"><ul class="tags"></ul></div>');
+var searchbox = $('<div class="filter"><h2>Filter</h2><p>Use the following tags to filter the list of employees.</p><ul class="tags"></ul></div>');
 var searchul = searchbox.find('ul');
 
 // Add tags to search box
 $.map(tags, function(x) {
-    searchul.append('<li class="toggled">' + x + '</li>');
+    var id = 'filter-' + x.toLowerCase().replace(' ', '-')
+    searchul.append('<li><label for="' + id + '">' + x + '<input id="' + id + '" type="checkbox" value="' + x + '" checked></label></li>');
 });
 
 // Append searchbox
 staff.prepend(searchbox);
 
 // Add function on click
-$('.filter .tags li').click(function() {
-    var curr = $(this).text();
+$('.filter .tags input').click(function() {
+    var curr = $(this).attr('value');
     // toggle clicked item
     $(this).toggleClass('toggled');
 
     bcards.find('.tags').each(function() {
         $(this).find('li').each(function() {
-            console.log($(this).text());
             if ($(this).text() == curr) {
-                console.log($(this));
-                console.log($(this).parentsUntil('li'));
                 $(this).parents('li').toggle('toggled');
                 return false;
             }

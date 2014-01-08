@@ -3,21 +3,10 @@
 /* } */
 
 #staff li {
-    list-style: none;
-    overflow: hidden;
-    line-height: 1em;
-    display: inline;
+    line-height: 1em !important;
 }
 
-.filter ul.tags {
-    padding: 0;
-}
-
-.filter ul.tags li {
-    padding-left: 1em;
-}
-
-#staff img {
+.business-card img {
     float: right;
     max-height: 12em;
     width: auto;
@@ -29,25 +18,32 @@
 li.business-card {
     padding: 1em;
     border-bottom: 1px solid #ccc;
+    list-style: none;
+    overflow: hidden;
+    line-height: 1em !important;
 }
 
-.business-card h1 {
-    margin-bottom: 0;
-} 
-
-.tags {
-    
+.business-card h1, .business-card h2 {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
 }
 
-.business-card ul.tags {
+.filter .tags input {
+    margin: 0;
+}
+
+ul.tags {
     padding: 0 0 0.5em 0;
 }
 
-.business-card ul.tags li {
+ul.tags li {
+    display: inline;
     border: 1px solid black;
     border-radius: 0.5em;
-    margin: 0 0.1em;
-    padding: 0.1em;
+    margin: 0 0.3em;
+    padding: 0.3em;
 /* cursor: pointer; */
 }
 
@@ -60,10 +56,31 @@ li.business-card {
 }
 
 .edit {
-    background: #ff8;
+    background: #ff8 !important;
 }
 
 .editable {
 /* should show an indicator that the item is editable */
-    
+}
+
+.editbutton {
+    float: left;
+    position: absolute;
+    right: 0em;
+    background-color: #666;
+    color: #fff;
+    padding: 1em;
+    border-radius: 0.5em;
+}
+
+.row-wrapper {
+    display: table-row;
+}
+
+.column {
+    display: table-cell;
+}
+
+.row-wrapper .column.info {
+    width: 300px;
 }

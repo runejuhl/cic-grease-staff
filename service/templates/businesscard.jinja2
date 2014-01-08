@@ -1,25 +1,36 @@
 {% extends "mockup.jinja2" %}
+{% block pagetitle %}<h1>Staff at Centre for Ice and Climate</h1>{% endblock %}
 {% block content %}
+<ul>
 {% for person in persons %}
 <li id="{{ person.id }}" class="business-card">
-{% if person.image_src %}
-  <div>    
-    <img src="{{ person.image_src }}" title="{{ person.name }}" alt="Picture of {{ person.name }}" />
+{% if person.picture %}
+  <div>
+    <img src="http://cms.ku.dk{{ person.picture }}" title="{{ person.firstname }} {{ person.lastname }}" alt="Picture of {{ person.firstname }} {{ person.lastname }}" />
   </div>
 {% endif %}
   <div>
-    <h1><a href="http://www.isogklima.nbi.ku.dk/ansatte/?id={{ person.kuid }}&vis=medarbejder">{{ person.name }}</a></h1>
-    <ul class="tags">{% for tag in person.tags|split %}<li>{{ tag }}</li>{% endfor %}</ul>
-    <address>
-      Niels Bohr Institutet, Is og klima<br>
-      Juliane Maries Vej 30<br>
-      2100 København Ø<br>
-      <br>
-      Kontor: {{ person.room }}<br>
-      Telefon: <a href="tel:{{ person.phone }}">{{ person.phone }}</a><br>
-      E-mail: <a href="mailto:{{ person.email }}">{{ person.email }}</a>
-    </address>        
+    <h1><a href="http://www.isogklima.nbi.ku.dk/ansatte/?id={{ person.kuid }}&vis=medarbejder">{{ person.firstname }} {{ person.lastname }}</a></h1>
+    {% if person.title %}<h2>{{ person.title }}</h2>{% endif %}
+    {% if person.tags %}<ul class="tags" style="display:none;">{% for tag in person.tags|split %}<li>{{ tag }}</li>{% endfor %}</ul>{% endif %}
+    <div class="row-wrapper">
+      <div class="column info">
+        <address>
+          Niels Bohr Institutet, Is og klima<br>
+          Juliane Maries Vej 30<br>
+          2100 København Ø<br>
+          <br>
+          Office: {{ person.location }}<br>
+          Phone: {% if person.phone %}<a href="tel:{{ person.phone }}" class="phone">{{ person.phone }}</a><br>{% else %}<a class="phone"></a>{% endif %}
+          E-mail: {% if person.email %}<a href="mailto:{{ person.email }}" class="email">{{ person.email }}</a><br>{% else %}<a class="email"></a>{% endif %}
+        </address>
+      </div>
+      <div class="column description">
+        {{ person.description }}
+      </div>
+    </div>
   </div>
 </li>
 {% endfor %}
+</ul>
 {% endblock %}
