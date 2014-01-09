@@ -15,15 +15,11 @@
     {% if person.tags %}<ul class="tags" style="display:none;">{% for tag in person.tags|split %}<li>{{ tag }}</li>{% endfor %}</ul>{% endif %}
     <div class="row-wrapper">
       <div class="column info">
-        <address>
-          Niels Bohr Institutet, Is og klima<br>
-          Juliane Maries Vej 30<br>
-          2100 København Ø<br>
-          <br>
-          Office: {{ person.location }}<br>
-          Phone: {% if person.phone %}<a href="tel:{{ person.phone }}" class="phone">{{ person.phone }}</a><br>{% else %}<a class="phone"></a>{% endif %}
-          E-mail: {% if person.email %}<a href="mailto:{{ person.email }}" class="email">{{ person.email }}</a><br>{% else %}<a class="email"></a>{% endif %}
-        </address>
+        <ul class="contact">
+          <li class="phone{% if person.phone %} hidden{% endif %}">Phone: <a href="tel:{{ person.phone }}" class="phone">{{ person.phone }}</a></li>
+          <li class="email{% if person.email %} hidden{% endif %}">E-mail: <a href="mailto:{{ person.email }}" class="email">{{ person.email }}</a></li>
+          <li class="homepage{% if person.homepage %} hidden{% endif %}">Homepage: <a href="mailto:{{ person.homepage }}" class="homepage">{{ person.homepage }}</a></li>
+        </ul>
       </div>
       <div class="column description">
         {{ person.description }}

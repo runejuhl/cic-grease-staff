@@ -3,84 +3,88 @@
 /* } */
 
 #staff li {
-    line-height: 1em !important;
+  line-height: 1em !important;
+  list-style: none;
 }
 
 .business-card img {
-    float: right;
-    max-height: 12em;
-    width: auto;
+  float: right;
+  max-height: 12em;
+  width: auto;
 }
 
-.business-card {
+.business-card ul.contact {
+  padding: 0;
 }
 
 li.business-card {
-    padding: 1em;
-    border-bottom: 1px solid #ccc;
-    list-style: none;
-    overflow: hidden;
-    line-height: 1em !important;
+  padding: 1em;
+  border-bottom: 1px solid #ccc;
+  overflow: hidden;
+  line-height: 1em !important;
 }
 
 .business-card h1, .business-card h2 {
-    margin-bottom: 0 !important;
-    padding-bottom: 0 !important;
-    margin-top: 0 !important;
-    padding-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 
+.business-card h2 {
+  margin-bottom: 1em !important;
+}
 .filter .tags input {
-    margin: 0;
+  margin: 0;
 }
 
 ul.tags {
-    padding: 0 0 0.5em 0;
+  padding: 0 0 0.5em 0;
 }
 
 ul.tags li {
-    display: inline;
-    border: 1px solid black;
-    border-radius: 0.5em;
-    margin: 0 0.3em;
-    padding: 0.3em;
-/* cursor: pointer; */
+  display: inline;
+  border: 1px solid black;
+  border-radius: 0.5em;
+  margin: 0 0.3em;
+  padding: 0.3em;
+  /* cursor: pointer; */
 }
 
 .toggled {
-    background-color: rgba(247, 245, 0, 0.53);
+  background-color: rgba(247, 245, 0, 0.53);
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 .edit {
-    background: #ff8 !important;
+  background: #ff8 !important;
 }
 
 .editable {
-/* should show an indicator that the item is editable */
+  /* should show an indicator that the item is editable */
 }
 
 .editbutton {
-    float: left;
-    position: absolute;
-    right: 0em;
-    background-color: #666;
-    color: #fff;
-    padding: 1em;
-    border-radius: 0.5em;
+  float: left;
+  position: absolute;
+  right: 0em;
+  background-color: #666;
+  color: #fff;
+  padding: 1em;
+  border-radius: 0.5em;
 }
 
 .row-wrapper {
-    display: table-row;
+  display: table-row;
 }
 
 .column {
-    display: table-cell;
+  display: table-cell;
 }
 
 .row-wrapper .column.info {
-    width: 300px;
+  width: 300px;
 }
