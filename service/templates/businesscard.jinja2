@@ -4,11 +4,6 @@
 <ul>
 {% for person in persons %}
 <li id="{{ person.id }}" class="business-card">
-{% if person.picture %}
-  <div>
-    <img src="http://cms.ku.dk{{ person.picture }}" title="{{ person.firstname }} {{ person.lastname }}" alt="Picture of {{ person.firstname }} {{ person.lastname }}" />
-  </div>
-{% endif %}
   <div>
     <h1><a href="http://www.isogklima.nbi.ku.dk/ansatte/?id={{ person.kuid }}&vis=medarbejder">{{ person.firstname }} {{ person.lastname }}</a></h1>
     {% if person.title %}<h2>{{ person.title }}</h2>{% endif %}
@@ -26,6 +21,11 @@
       </div>
     </div>
   </div>
+      {% if person.picture %}
+        <div class="photo">
+          <img src="http://cms.ku.dk{{ person.picture }}" title="{{ person.firstname }} {{ person.lastname }}" alt="Picture of {{ person.firstname }} {{ person.lastname }}" />
+        </div>
+      {% endif %}
 </li>
 {% endfor %}
 </ul>

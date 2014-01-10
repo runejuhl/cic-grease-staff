@@ -77,14 +77,27 @@ ul.tags li {
   border-radius: 0.5em;
 }
 
+.on {
+  background-color: #0b0;
+}
+
 .row-wrapper {
-  display: table-row;
+  display: block;
 }
 
 .column {
-  display: table-cell;
+  float: left;
 }
 
-.row-wrapper .column.info {
+.column.info {
   width: 300px;
+}
+
+.column.description {
+  margin-left: 300px;
+  width: 300px;
+}
+
+.photo {
+  float: right !important;
 }
