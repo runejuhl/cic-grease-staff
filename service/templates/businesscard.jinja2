@@ -5,15 +5,20 @@
 {% for person in persons %}
 <li id="{{ person.id }}" class="business-card">
   <div>
+      {% if person.picture %}
+        <div class="photo">
+          <img src="http://cms.ku.dk{{ person.picture }}" title="{{ person.firstname }} {{ person.lastname }}" alt="Picture of {{ person.firstname }} {{ person.lastname }}" />
+        </div>
+      {% endif %}
     <h1><a href="http://www.isogklima.nbi.ku.dk/ansatte/?id={{ person.kuid }}&vis=medarbejder">{{ person.firstname }} {{ person.lastname }}</a></h1>
     {% if person.title %}<h2>{{ person.title }}</h2>{% endif %}
     {% if person.tags %}<ul class="tags" style="display:none;">{% for tag in person.tags|split %}<li>{{ tag }}</li>{% endfor %}</ul>{% endif %}
     <div class="row-wrapper">
       <div class="column info">
         <ul class="contact">
-          <li class="phone{% if person.phone %} hidden{% endif %}">Phone: <a href="tel:{{ person.phone }}" class="phone">{{ person.phone }}</a></li>
-          <li class="email{% if person.email %} hidden{% endif %}">E-mail: <a href="mailto:{{ person.email }}" class="email">{{ person.email }}</a></li>
-          <li class="homepage{% if person.homepage %} hidden{% endif %}">Homepage: <a href="mailto:{{ person.homepage }}" class="homepage">{{ person.homepage }}</a></li>
+          <li class="phone{% if not person.phone %} hidden{% endif %}">Phone: <a href="tel:{{ person.phone }}" class="phone">{{ person.phone }}</a></li>
+          <li class="email{% if not person.email %} hidden{% endif %}">E-mail: <a href="mailto:{{ person.email }}" class="email">{{ person.email }}</a></li>
+          <li class="homepage{% if not person.homepage %} hidden{% endif %}">Homepage: <a href="{{ person.homepage }}" class="homepage">{{ person.homepage }}</a></li>
         </ul>
       </div>
       <div class="column description">
@@ -21,11 +26,6 @@
       </div>
     </div>
   </div>
-      {% if person.picture %}
-        <div class="photo">
-          <img src="http://cms.ku.dk{{ person.picture }}" title="{{ person.firstname }} {{ person.lastname }}" alt="Picture of {{ person.firstname }} {{ person.lastname }}" />
-        </div>
-      {% endif %}
 </li>
 {% endfor %}
 </ul>
