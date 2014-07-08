@@ -96,14 +96,15 @@ def update():
         return render_template('upload.jinja2')
 
     if request.method == 'POST':
-        people =  csv_to_people(request.files['file'])
+        people = request.form['people']
+
+        print people
 
         content = render_template('businesscard.jinja2', persons = people)
         print "PEOPLE!!!!!!"
         print people
         # print content
 
-        return
         header = '<script type="text/javascript">\n'
         header += open('static/staff.js', 'r').read()
         header += '</script>\n'

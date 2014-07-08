@@ -1,6 +1,34 @@
+// debugger;
+
 $(document).ready(function() {
   var file = $('#file');
-  var update = $('#update')[0];
+  var form = $('#people');
+  var status = $('#status');
+  // var res;
+
+  form.submit(function(event) {
+    event.preventDefault();
+    // Update status
+    status.html('Updating employee page...');
+
+    // POST people
+    $.ajax({
+      async: true,
+      data: {people: JSON.stringify(res.results.rows)},
+      dataType: 'json',
+      type: 'POST',
+    })
+      .done(
+        function(html) {
+          status.html(html);
+        }
+      )
+      .fail(
+        function(html) {
+          status.html(html);
+        }
+      );
+  });
 
   file.change(function(event) {
     update.disabled = true;
