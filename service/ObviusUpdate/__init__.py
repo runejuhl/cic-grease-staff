@@ -9,7 +9,7 @@ from pprint import pprint
 
 URL = 'http://cms.ku.dk/admin/nat-sites/nbi-sites/cik/english/test-rune/'
 EDIT_URL = 'http://cms.ku.dk/admin/nat-sites/nbi-sites/cik/english/test-rune/?obvius_command_edit=1'
-SESSID = '732c50ab1b73a497d68d4470e2792ddc'
+SESSID = 'fd655d7d01f7c4c8e246c127107eaba6'
 HEADERS = {'Referer': EDIT_URL, 'Accept-Language': 'en-US,en'}
 DATA = {}
 
@@ -72,11 +72,7 @@ class ObviusUpdate:
         def has_name_and_value(e):
             return ('name' in e and 'value' in e)
 
-        print(len(elems))
-        # elems = list(filter(has_name_and_value, elems))
-        # print(len(elems))
         elems = list(map(lambda x: (x['name'], x['value'] if 'value' in x else ''), elems))
-        pprint(elems)
         elems = dict(elems)
 
         return elems

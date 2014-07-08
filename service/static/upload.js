@@ -19,13 +19,14 @@ $(document).ready(function() {
       type: 'POST',
     })
       .done(
-        function(html) {
-          status.html(html);
+        function(resp) {
+          status.html(resp.responseText);
         }
       )
       .fail(
-        function(html) {
-          status.html(html);
+        function(resp) {
+          console.log(resp.responseText);
+          status.html(resp.responseText);
         }
       );
   });
