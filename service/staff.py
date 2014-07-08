@@ -6,6 +6,14 @@ import simplejson as json
 
 from flask import Flask, jsonify, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask import request
+
+from ObviusUpdate import ObviusUpdate
+
+import csv, codecs, cStringIO
+
+UPLOAD_FOLDER = '/tmp'
+ALLOWED_EXTENSIONS = set(['csv'])
 
 tags = ['Scientific staff', 'Tech+Adm staff', 'PhD student', 'Student', 'Guest', 'Former member']
 groups = ['Ice and Climate', 'Meteorology', 'Oceanography']
@@ -13,6 +21,7 @@ groups = ['Ice and Climate', 'Meteorology', 'Oceanography']
 # url_for('static', filename='style.css')
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.debug = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///staff.sqlite3'
 db = SQLAlchemy(app)
@@ -23,8 +32,8 @@ def reverse_filter(s):
 
 class Person(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.String)
-    lastname = db.Column(db.String)
+    name = db.Column(db.String)
+    # lastname = db.Column(db.String)
     title = db.Column(db.String)
     phone = db.Column(db.String)
     email = db.Column(db.String)
@@ -36,9 +45,8 @@ class Person(db.Model):
     tags = db.Column(db.String)
     groups = db.Column(db.String)
 
-    def __init__(self, firstname, lastname, title, phone, email, description, homepage, picture, address, kuid, tags, groups):
-        self.firstname = firstname
-        self.lastname = lastname
+    def __init__(self, name, title, phone, email, description, homepage, picture, address, kuid, tags, groups):
+        self.name = name
         self.title = title
         self.phone = phone
         self.email = email
@@ -50,47 +58,92 @@ class Person(db.Model):
         self.tags = tags
         self.groups = groups
 
-    def __repr__(self):
-        return json.dumps({
-            'id'                : self.id,
-            'name'              : self.name,
-            'email'             : self.email,
-            'image_src'         : self.image_src,
-            'kuid'              : self.kuid,
-            'room'              : self.room,
-            'phone'             : self.phone,
-            'tags'              : self.tags,
-            'groups'            : self.groups,
-        })
+    # def __repr__(self):
+    #     return json.dumps({
+    #         'id'                : self.id,
+    #         'name'              : self.name,
+    #         'email'             : self.email,
+    #         'image_src'         : self.image_src,
+    #         'kuid'              : self.kuid,
+    #         'room'              : self.room,
+    #         'phone'             : self.phone,
+    #         'tags'              : self.tags,
+    #         'groups'            : self.groups,
+    #     })
 
-@app.route('/')
-def index():
-    print Person.query.all().join(tag)
-    return render_template('businesscard.jinja2', person = Person.query.all())
 
 @app.route('/get/all')
 def get_all():
     # return jsonify(all = [i.serialize for i in Person.query.all()])
-    return render_template('businesscard.jinja2', persons = Person.query.order_by(Person.lastname).all())
+    p = Person.query.all()
+    p = [{'name': 'omg'}]
+    return render_template('businesscard.jinja2', persons = p)
 
 @app.route('/get/<id>')
 def get_single(id):
     p = Person.query.filter_by(id=id).first()
     return render_template('businesscard.jinja2', persons = [p])
 
-@app.route('/json/all', methods=['GET'])
-def json_all():
-    p = Person.query.all()
-    return repr(p)
-
-@app.route('/json/<id>', methods=['GET'])
-def json_single():
+@app.route('/edit/<id>', methods=['POST', 'GET'])
+def edit_single(id):
     p = Person.query.filter_by(id=id).first()
-    return repr(p)
+    return render_template('single.jinja2', person = p)
 
-@app.route('/json/new', methods=['POST'])
-def json_new():
-    pass
+@app.route('/', methods=['POST', 'GET'])
+def update():
+
+    if request.method == 'GET':
+        return render_template('upload.jinja2')
+
+    elif request.method == 'POST':
+        people =  csv_to_people(request.files['file'])
+
+        content = render_template('businesscard.jinja2', persons = people)
+        print "PEOPLE!!!!!!"
+        print people
+        # print content
+
+        return
+        header = '<script type="text/javascript">\n'
+        header += open('static/staff.js', 'r').read()
+        header += '</script>\n'
+        header += '<style type="text/css">\n'
+        header += open('static/style.css', 'r').read()
+        header += '</style>\n'
+
+
+        URL = 'http://cms.ku.dk/admin/nat-sites/nbi-sites/cik/english/test-rune/'
+        SESSID = '732c50ab1b73a497d68d4470e2792ddc'
+
+        o = ObviusUpdate(URL, SESSID)
+        resp = o.update(content, header)
+        if resp.status_code == 200:
+            return "Job done!"
+        else:
+            return """Err. Something happened. You probably need to get a hold of Rune/current IT God.
+
+Here is some information for whoever it is:
+
+Response code: %s
+Headers: %s""" % (resp.status_code, resp.headers)
+
+def UnicodeDictReader(utf8_data, **kwargs):
+    csv_reader = csv.DictReader(utf8_data, **kwargs)
+    for row in csv_reader:
+        try:
+            yield dict([(key, unicode(value, 'latin-1')) for key, value in row.iteritems()])
+        except TypeError as e:
+            print "Row: " + str(row)
+
+def csv_to_people(f):
+    people = []
+    # for e in csv.DictReader(f):
+    for e in UnicodeDictReader(f):
+        # print e
+        people.append(e)
+
+    return people
+
 
 def run():
     app.run()
@@ -106,6 +159,38 @@ def stripquotes(x):
         if x.startswith('"') and x.endswith('"'):
             return x[1:-1]
     return x
+
+class UTF8Recoder:
+    """
+    Iterator that reads an encoded stream and reencodes the input to UTF-8
+    """
+    def __init__(self, f, encoding):
+        self.reader = codecs.getreader(encoding)(f)
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        return self.reader.next().encode("utf-8")
+
+class UnicodeReader:
+    """
+    A CSV reader which will iterate over lines in the CSV file "f",
+    which is encoded in the given encoding.
+    """
+
+    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
+        f = UTF8Recoder(f, encoding)
+        self.reader = csv.DictReader(f, dialect=dialect, **kwds)
+
+    def next(self):
+        row = self.reader.next()
+        print row
+        print [unicode(s, "utf-8") for s in row]
+        return [unicode(s, "utf-8") for s in row]
+
+    def __iter__(self):
+        return self
 
 if __name__ == '__main__':
     if '--db' in sys.argv:
@@ -128,7 +213,7 @@ if __name__ == '__main__':
         # # db.session.add(Person('', '', , '', '', '', '', 'Ice and Climate'))
         # # db.session.add(Person('', '', , '', '', '', '', 'Ice and Climate'))
         for e in csv.DictReader(open('../data/employees.csv', 'r')):
-            attrs = (e['firstname'], e['lastname'], e['title'], e['phone'], e['email'], e['description'], e['homepage'], e['picture'], e['address'], e['kuid'], e['tags'], 'Ice and Climate')
+            attrs = ("%s %s" % (e['firstname'], e['lastname']), e['title'], e['phone'], e['email'], e['description'], e['homepage'], e['picture'], e['address'], e['kuid'], e['tags'], 'Ice and Climate')
             attrs = map(toutf8, attrs)
             attrs = map(stripquotes, attrs)
             print attrs
@@ -137,4 +222,3 @@ if __name__ == '__main__':
         db.session.commit()
     else:
         app.run()
-

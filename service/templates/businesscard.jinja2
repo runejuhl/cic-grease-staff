@@ -1,16 +1,17 @@
-{% extends "mockup.jinja2" %}
-{% block pagetitle %}<h1>Staff at Centre for Ice and Climate</h1>{% endblock %}
-{% block content %}
+{# {% extends "mockup.jinja2" %} #}
+{# {% block pagetitle %}<h1>Staff at Centre for Ice and Climate</h1>{% endblock %} #}
+{# {% block content %} #}
+<div id="staff">
 <ul>
 {% for person in persons %}
 <li id="{{ person.id }}" class="business-card">
   <div>
       {% if person.picture %}
         <div class="photo">
-          <img src="http://cms.ku.dk{{ person.picture }}" title="{{ person.firstname }} {{ person.lastname }}" alt="Picture of {{ person.firstname }} {{ person.lastname }}" />
+          <img src="http://cms.ku.dk{{ person.picture }}" title="{{ person.name }}" alt="Picture of {{ person.name }}" />
         </div>
       {% endif %}
-    <h1><a href="http://www.isogklima.nbi.ku.dk/ansatte/?id={{ person.kuid }}&vis=medarbejder">{{ person.firstname }} {{ person.lastname }}</a></h1>
+    <h1><a href="http://www.isogklima.nbi.ku.dk/ansatte/?id={{ person.kuid }}&vis=medarbejder">{{ person.name }}</a></h1>
     {% if person.title %}<h2>{{ person.title }}</h2>{% endif %}
     {% if person.tags %}<ul class="tags" style="display:none;">{% for tag in person.tags|split %}<li>{{ tag }}</li>{% endfor %}</ul>{% endif %}
     <div class="row-wrapper">
@@ -29,4 +30,5 @@
 </li>
 {% endfor %}
 </ul>
-{% endblock %}
+</div>
+{# {% endblock %} #}
