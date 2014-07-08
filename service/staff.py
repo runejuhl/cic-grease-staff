@@ -26,7 +26,7 @@ def update():
         try:
             sessid = request.args['sessid']
         except KeyError as e:
-            return "You need to provide a session ID in the query string for this to work. Please access this page from Obvius.", 500
+            return 'You need to provide a session ID in the query string for this to work. Please access this page from Obvius. If you do not have an edit button on the relevant page, please install Greasemonkey and this: <a href="static/CIC_employee.user.js">CIC_employee.user.js</a>', 500
         people = request.form['people']
 
         print people
