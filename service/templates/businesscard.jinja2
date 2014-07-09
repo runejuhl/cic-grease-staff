@@ -8,7 +8,7 @@
   <div>
       {% if person.picture %}
         <div class="photo">
-          <img src="http://cms.ku.dk{{ person.picture }}" title="{{ person.name }}" alt="Picture of {{ person.name }}" />
+          <img src="http://www.isogklima.nbi.ku.dk/ansatte/proeve/{{ person.picture|replace(" ", "_") }}" title="{{ person.name }}" alt="Picture of {{ person.name }}" />
         </div>
       {% endif %}
     <h1><a href="http://www.isogklima.nbi.ku.dk/ansatte/?id={{ person.kuid }}&vis=medarbejder">{{ person.name }}</a></h1>
