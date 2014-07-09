@@ -18,7 +18,7 @@
 //     });
 // }
 
-var url = 'http://localhost:5000/'
+var url = 'http://creep.gfy.ku.dk/employeepage/'
 
 $(document).ready(
 

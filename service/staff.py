@@ -28,16 +28,9 @@ def update():
         except KeyError as e:
             return 'You need to provide a session ID in the query string for this to work. Please access this page from Obvius. If you do not have an edit button on the relevant page, please install Greasemonkey and this: <a href="static/CIC_employee.user.js">CIC_employee.user.js</a>', 500
         people = request.form['people']
-
-        print people
-        print type(people)
-
         people = json.loads(people)
-        print people
-        print type(people)
 
         content = render_template('businesscard.jinja2', persons = people)
-        print content
 
         header = '<script type="text/javascript">\n'
         header += open('static/staff.js', 'r').read()
@@ -45,7 +38,6 @@ def update():
         header += '<style type="text/css">\n'
         header += open('static/style.css', 'r').read()
         header += '</style>\n'
-
 
         URL = 'http://cms.ku.dk/admin/nat-sites/nbi-sites/cik/english/test-rune/'
 

@@ -87,41 +87,10 @@ class ObviusUpdate:
             'obvius_editengine_protocol_function': 'save_and_publish=edit_.key::KRAKOW._save_and_publish:',
             'edit_.key::KRAKOW._save:editengine_value:key::KRAKOW:extra_html_head_thisonly': header
         })
-        pprint(data)
-        print(len(data))
+
         data2 = {k: ('', v) for k,v in data.items()}
 
         # use 'files' to have requests send data as multipart/form-data
         req = r.post(URL, files=data2, cookies=self.cookies, headers=self.headers)
         print(req.status_code)
         return req
-
-
-# def get_current():
-#     req = r.get(EDIT_URL, cookies=COOKIES, headers={'Accept-Language': 'en-US,en'})
-#     data = get_fields(StringIO(req.text))
-#     return data
-
-# def update_post(data):
-#     data.update({
-#         # actual content
-#         'edit_.key::KRAKOW._save:editengine_value:key::KRAKOW:content': '<h1>LOL OMG!</h1>\n',
-#         'obvius_editengine_protocol_confirmation:save_and_publish': 'Save and publish',
-#         'editengine_scheme:edit_.key::KRAKOW._save:': '\n',
-#         'obvius_editengine_protocol_function': 'save_and_publish=edit_.key::KRAKOW._save_and_publish:',
-#         'edit_.key::KRAKOW._save:editengine_value:key::KRAKOW:extra_html_head_thisonly': ''
-#         })
-#     pprint(data)
-#     print(len(data))
-#     data2 = {k: ('', v) for k,v in data.items()}
-
-#     # use 'files' to have requests send data as multipart/form-data
-#     req = r.post(URL, files=data2, cookies=COOKIES, headers=HEADERS)
-#     print(req.status_code)
-
-# if __name__ == '__main__':
-#     # data = get_current()
-#     # update_post(data)
-
-#     o = ObviusUpdate(URL, SESSID)
-#     o.update(body, header=None)
