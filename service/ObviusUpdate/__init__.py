@@ -9,7 +9,6 @@ from pprint import pprint
 
 URL = 'http://cms.ku.dk/admin/nat-sites/nbi-sites/cik/english/test-rune/'
 EDIT_URL = 'http://cms.ku.dk/admin/nat-sites/nbi-sites/cik/english/test-rune/?obvius_command_edit=1'
-SESSID = 'fd655d7d01f7c4c8e246c127107eaba6'
 HEADERS = {'Referer': EDIT_URL, 'Accept-Language': 'en-US,en'}
 DATA = {}
 
@@ -90,7 +89,10 @@ class ObviusUpdate:
 
         data2 = {k: ('', v) for k,v in data.items()}
 
+        print(data2)
+
         # use 'files' to have requests send data as multipart/form-data
         req = r.post(URL, files=data2, cookies=self.cookies, headers=self.headers)
         print(req.status_code)
+        # print(req.text.encode('utf-8'))
         return req

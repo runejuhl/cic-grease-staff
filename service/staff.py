@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
-
 import simplejson as json
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, render_template
 from flask import request
 
 from ObviusUpdate import ObviusUpdate
@@ -44,6 +42,7 @@ def update():
         o = ObviusUpdate(URL, sessid)
         resp = o.update(content, header)
         if resp.status_code == 200:
+            print resp.headers
             return "Job done!"
         else:
             return """Err. Something happened. You probably need to get a hold of Rune/current IT God.
@@ -52,9 +51,6 @@ Here is some information for whoever it is:
 
 Response code: %s
 Headers: %s""" % (resp.status_code, resp.headers), 500
-
-def run():
-    app.run()
 
 if __name__ == '__main__':
     app.run()
