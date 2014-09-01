@@ -3,11 +3,63 @@
 // @namespace   cic.petardo.dk
 // @description Additional tools for the CIC employee page
 // @include     http://cms.ku.dk/admin/nat-sites/nbi-sites/cik/english/test-rune/?*
-// @version     0.2
+// @resource style style.css
+// @version     0.35
 // @grant       none
 // ==/UserScript==
 
+var sitescript = function() {
+  // containing div
+  var staff = $('#staff');
+  // all "business cards" have this class
+  var bcards = $('.business-card')
+
+  // generate a list of tags used in the document, sort them and remove
+  // duplicates
+  var tags = [];
+  var tmptags = staff.find('.tags li')
+    .map(function() {
+      return this.textContent;
+    })
+    .sort();
+
+  for (var i = 0; i < tmptags.length; i++)
+    if (tags && tags[tags.length-1] != tmptags[i])
+      tags.push(tmptags[i])
+
+  // Create the tag selection box
+  var searchbox = $('<div class="filter"><h2>Filter</h2><p>Use the following tags to filter the list of employees.</p><ul class="tags"></ul></div>');
+  var searchul = searchbox.find('ul');
+
+  // Add tags to search box
+  $.map(tags, function(x) {
+    var id = 'filter-' + x.toLowerCase().replace(' ', '-')
+    searchul.append('<li><label for="' + id + '">' + x + '<input id="' + id + '" type="checkbox" value="' + x + '" checked></label></li>');
+  });
+
+  // Append searchbox
+  staff.prepend(searchbox);
+
+  // Add function on click
+  $('.filter .tags input').click(function() {
+    var curr = $(this).attr('value');
+    // toggle clicked item
+    $(this).toggleClass('toggled');
+
+    bcards.find('.tags').each(function() {
+      $(this).find('li').each(function() {
+        if ($(this).text() == curr) {
+          $(this).parents('li').toggle('toggled');
+          return false;
+        }
+      });
+    });
+  });
+};
+
 $(document).ready(
+  // alert(GM_getResourceText("style"));
+
   // PAPA PARSE!
   function() {
     (function($)
@@ -690,8 +742,8 @@ $(document).ready(
 
         console.log(tmp)
         if (tmp.length == 2) {
-          title = tmp[0];
-          url = tmp[1];
+          title = tmp[0].trim();
+          url = tmp[1].trim();
         } else {
           url = items[i];
         }
@@ -702,7 +754,11 @@ $(document).ready(
           result += '<li>';
 
         if (title) {
-          result += '<a href="' + hrefPrefix + url + '" class="' + type + '">' + title + ": " + url + '</a>';
+          if (type == 'homepage') {
+            result += '<a href="' + hrefPrefix + url + '" class="' + type + '">' + title + '</a>';
+          } else {
+            result += '<a href="' + hrefPrefix + url + '" class="' + type + '">' + title + ": " + url + '</a>';
+          }
         } else {
           result += '<a href="' + hrefPrefix + url + '" class="' + type + '">' + url + '</a>';
         }
@@ -720,7 +776,7 @@ $(document).ready(
 
     // Function for rendering information (an array of people) to DOM.
     var render = function(people) {
-      var result = '<h1>Team members</h1><div id="staff"> <ul>';
+      var result = '<h1>Team members</h1><p>På denne side findes oplysninger om personalet på Center for Is og Klima. En liste over centerpartnere og andre tilknyttede, der ikke har deres faglige gang på centeret, finder <a href="http://www.iceandclimate.nbi.ku.dk/staff/affiliates2/">her (engelsk side)</a>.</p><div id="staff"> <ul>';
 
       var person;
       for (var i = 0; i < people.length; i++) {
@@ -740,7 +796,13 @@ $(document).ready(
         }
 
         // tags
-        result += '<ul class="tags" style="display:none;"><li>' + person.tags + '</li></ul>';
+        result += '<ul class="tags" style="display:none;">';
+
+        var tags = person.tags.split(',');
+        for (var i = 0; i < tags.length; i++) {
+          result += '<li>' + tags[i] + '</li>';
+        }
+        result += '</ul>';
 
         result += '<div class="row-wrapper"> <div class="column info">';
 
