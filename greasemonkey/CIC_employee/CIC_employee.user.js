@@ -3,19 +3,22 @@
 // @namespace   cic.petardo.dk
 // @description Additional tools for the CIC employee page
 // @include     http://cms.ku.dk/admin/nat-sites/nbi-sites/cik/english/test-rune/?*
-// @resource style style.css
-// @version     0.35
-// @grant       none
+// @include     http://cms.ku.dk/admin/nat-sites/nbi-sites/cik/ansatte/?*
+
+// @version     0.39
 // ==/UserScript==
 
-var sitescript = function() {
-  // containing div
-  var staff = $('#staff');
-  // all "business cards" have this class
-  var bcards = $('.business-card')
+var sitestyle = ' \
+CSSSENTINEL \
+';
 
-  // generate a list of tags used in the document, sort them and remove
-  // duplicates
+var sitescript = function() {
+  // Containing div
+  var staff = $('#staff');
+  // All "business cards" have this class
+  var bcards = $('.business-card');
+
+  // Generate a list of tags used in the document and sort them
   var tags = [];
   var tmptags = staff.find('.tags li')
     .map(function() {
@@ -23,6 +26,7 @@ var sitescript = function() {
     })
     .sort();
 
+  // Remove duplicates
   for (var i = 0; i < tmptags.length; i++)
     if (tags && tags[tags.length-1] != tmptags[i])
       tags.push(tmptags[i])
@@ -33,7 +37,7 @@ var sitescript = function() {
 
   // Add tags to search box
   $.map(tags, function(x) {
-    var id = 'filter-' + x.toLowerCase().replace(' ', '-')
+    var id = 'filter-' + x.toLowerCase().replace(' ', '-');
     searchul.append('<li><label for="' + id + '">' + x + '<input id="' + id + '" type="checkbox" value="' + x + '" checked></label></li>');
   });
 
@@ -42,26 +46,53 @@ var sitescript = function() {
 
   // Add function on click
   $('.filter .tags input').click(function() {
+    var currentTags = $('.filter ul.tags li')
+      .get()
+      .reduce(
+        function (acc,x) {
+          if (x.querySelector('input').checked) {
+            return acc.concat(x.querySelector('input').value)
+          } else {
+            return acc;
+          }
+        }, []);
+
     var curr = $(this).attr('value');
     // toggle clicked item
     $(this).toggleClass('toggled');
 
-    bcards.find('.tags').each(function() {
-      $(this).find('li').each(function() {
-        if ($(this).text() == curr) {
-          $(this).parents('li').toggle('toggled');
-          return false;
+    var matching = bcards
+      .find('.tags')
+      .map(
+        function(x) {
+          var tmp = $(this)
+            .find('li')
+            .get()
+            .reduce(function (acc,x) {
+              console.log(x.innerHTML);
+              return (currentTags.indexOf(x.innerHTML) != -1) || acc;
+            }, false);
+          if (tmp) {
+            return $(this);
+          }
         }
-      });
+      );
+
+    bcards.map(function() {
+      $(this).hide();
     });
+
+    matching.map(function() {
+      $(this).show();
+    });
+
   });
 };
 
+// PAPA PARSE!
 $(document).ready(
-  // alert(GM_getResourceText("style"));
-
-  // PAPA PARSE!
   function() {
+
     (function($)
      {
 	     "use strict";
@@ -716,9 +747,7 @@ $(document).ready(
     var status = $('#people-status');
 
     var link = function(type, titleurl) {
-      console.log('here:', type, titleurl);
       var items = titleurl.split('|');
-      console.log(items);
 
       var result = '';
 
@@ -740,15 +769,12 @@ $(document).ready(
         var tmp = items[i].split(',');
         var title, url;
 
-        console.log(tmp)
         if (tmp.length == 2) {
           title = tmp[0].trim();
           url = tmp[1].trim();
         } else {
           url = items[i];
         }
-
-        console.log(tmp, title, url);
 
         if (multiple)
           result += '<li>';
@@ -770,7 +796,6 @@ $(document).ready(
           result += '</ul>';
       }
 
-      console.log(result);
       return result;
     };
 
@@ -779,10 +804,11 @@ $(document).ready(
       var result = '<h1>Team members</h1><p>På denne side findes oplysninger om personalet på Center for Is og Klima. En liste over centerpartnere og andre tilknyttede, der ikke har deres faglige gang på centeret, finder <a href="http://www.iceandclimate.nbi.ku.dk/staff/affiliates2/">her (engelsk side)</a>.</p><div id="staff"> <ul>';
 
       var person;
+
       for (var i = 0; i < people.length; i++) {
         person = people[i];
 
-        result += '<li id="' + person.id + '" class="business-card">';
+        result += '<li class="business-card">';
         result += '<div>';
 
         if (person.picture) {
@@ -799,8 +825,8 @@ $(document).ready(
         result += '<ul class="tags" style="display:none;">';
 
         var tags = person.tags.split(',');
-        for (var i = 0; i < tags.length; i++) {
-          result += '<li>' + tags[i] + '</li>';
+        for (var j = 0; j < tags.length; j++) {
+          result += '<li>' + tags[j] + '</li>';
         }
         result += '</ul>';
 
@@ -830,14 +856,21 @@ $(document).ready(
 
         result += '</ul> </div>';
         result += '</div> </div> </li>';
+
       }
 
       result += '</ul></div>';
 
-      return $(result);
+      return result;
     };
 
+    // FIXME
+    var head = document.getElementById('edit_.key::KRAKOW._save:editengine_value:key::KRAKOW:extra_html_head_thisonly');
+    head.value = '<style type="text/css">\n' + sitestyle + '\n</style>';
+    head.value += '<script type="text/javascript">\n' + sitescript.toString() + '\n</script>';
+
     file.change(function(event) {
+      status.html('Please wait...');
       var parsed = file.parse({
         config: {
           delimiter: "",
@@ -857,23 +890,17 @@ $(document).ready(
             return;
           }
 
-          rendered = render(data.results.rows);
-
-          console.log(rendered);
-
           var iframe = $('td.mceIframeContainer.mceFirst.mceLast > iframe').last();
           var iframeContents = iframe.contents().find('html > body');
 
-          console.log(iframeContents);
-          console.log(iframeContents.html());
-          iframeContents.html(rendered);
+          iframeContents.html(render(data.results.rows));
+
+          status.html('Everything seems fine. Feel free to save and publish.');
         },
       });
 
       return true;
     });
-    file.change();
-
 
   }
 );
