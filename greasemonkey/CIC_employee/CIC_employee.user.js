@@ -4,8 +4,9 @@
 // @description Additional tools for the CIC employee page
 // @include     http://cms.ku.dk/admin/nat-sites/nbi-sites/cik/english/test-rune/?*
 // @include     http://cms.ku.dk/admin/nat-sites/nbi-sites/cik/ansatte/?*
+// @require     http://cms.ku.dk/jquery/1.8.3/jquery-1.8.3.min.js
 
-// @version     0.39
+// @version     0.50
 // ==/UserScript==
 
 var sitestyle = ' \
@@ -13,79 +14,85 @@ CSSSENTINEL \
 ';
 
 var sitescript = function() {
-  // Containing div
-  var staff = $('#staff');
-  // All "business cards" have this class
-  var bcards = $('.business-card');
+$(document).ready(
+  function() {
+    // Containing div
+    var staff = $('#staff');
+    // All "business cards" have this class
+    var bcards = $('.business-card');
 
-  // Generate a list of tags used in the document and sort them
-  var tags = [];
-  var tmptags = staff.find('.tags li')
-    .map(function() {
-      return this.textContent;
-    })
-    .sort();
+    // Generate a list of tags used in the document and sort them
+    var tags = [];
+    var tmptags = staff.find('.tags li')
+      .map(function() {
+        return this.textContent;
+      })
+      .sort();
 
-  // Remove duplicates
-  for (var i = 0; i < tmptags.length; i++)
-    if (tags && tags[tags.length-1] != tmptags[i])
-      tags.push(tmptags[i])
+    // Remove duplicates
+    for (var i = 0; i < tmptags.length; i++)
+      if (tags && tags[tags.length-1] != tmptags[i])
+        tags.push(tmptags[i])
 
-  // Create the tag selection box
-  var searchbox = $('<div class="filter"><h2>Filter</h2><p>Use the following tags to filter the list of employees.</p><ul class="tags"></ul></div>');
-  var searchul = searchbox.find('ul');
+    // Create the tag selection box
+    var searchbox = $('<div class="filter"><h2>Filter</h2><p>Use the following tags to filter the list of employees.</p><ul class="tags"></ul></div>');
+    var searchul = searchbox.find('ul');
 
-  // Add tags to search box
-  $.map(tags, function(x) {
-    var id = 'filter-' + x.toLowerCase().replace(' ', '-');
-    searchul.append('<li><label for="' + id + '">' + x + '<input id="' + id + '" type="checkbox" value="' + x + '" checked></label></li>');
-  });
-
-  // Append searchbox
-  staff.prepend(searchbox);
-
-  // Add function on click
-  $('.filter .tags input').click(function() {
-    var currentTags = $('.filter ul.tags li')
-      .get()
-      .reduce(
-        function (acc,x) {
-          if (x.querySelector('input').checked) {
-            return acc.concat(x.querySelector('input').value)
-          } else {
-            return acc;
-          }
-        }, []);
-
-    var curr = $(this).attr('value');
-    // toggle clicked item
-    $(this).toggleClass('toggled');
-
-    var matching = bcards
-      .find('.tags')
-      .map(
-        function(x) {
-          var tmp = $(this)
-            .find('li')
-            .get()
-            .reduce(function (acc,x) {
-              console.log(x.innerHTML);
-              return (currentTags.indexOf(x.innerHTML) != -1) || acc;
-            }, false);
-          if (tmp) {
-            return $(this);
-          }
-        }
-      );
-
-    bcards.map(function() {
-      $(this).hide();
+    // Add tags to search box
+    $.map(tags, function(x) {
+      var id = 'filter-' + x.toLowerCase().replace(' ', '-');
+      searchul.append('<li class="toggled"><label for="' + id + '">' + x + '<input id="' + id + '" class="hidden" type="checkbox" value="' + x + '" checked></label></li>');
     });
 
-    matching.map(function() {
-      $(this).show();
-    });
+    // Append searchbox
+    staff.prepend(searchbox);
 
+    // Filter inputs
+    var inputFilters = $('.filter .tags input');
+
+    // Add function on click
+    inputFilters.click(function() {
+      console.log($(this));
+      var currentTags = $('.filter ul.tags li')
+        .get()
+        .reduce(
+          function (acc,x) {
+            if (x.querySelector('input').checked) {
+              return acc.concat(x.querySelector('input').value)
+            } else {
+              return acc;
+            }
+          }, []);
+
+      // toggle clicked item
+      $(this).parents('li').toggleClass('toggled');
+
+      var matching = bcards
+        .find('.tags')
+        .map(
+          function(x) {
+            var tmp = $(this)
+              .find('li')
+              .get()
+              .reduce(function (acc,x) {
+                console.log(x.innerHTML);
+                return (currentTags.indexOf(x.innerHTML) != -1) || acc;
+              }, false);
+            if (tmp) {
+              return $(this).parents('li');
+            }
+          }
+        );
+
+      bcards.map(function() {
+        $(this).hide();
+      });
+
+      matching.map(function() {
+        $(this).show();
+      });
+
+    });
   });
 };
 
@@ -835,6 +842,10 @@ $(document).ready(
         // description
         result += '<div class="column description">' + person.description + ' </div> ';
 
+        if (person.project) {
+          result += '<div class="project">' + person.project + '</div>';
+        }
+
         // contact information
         result += '<ul class="contact">';
 
@@ -864,10 +875,11 @@ $(document).ready(
       return result;
     };
 
-    // FIXME
     var head = document.getElementById('edit_.key::KRAKOW._save:editengine_value:key::KRAKOW:extra_html_head_thisonly');
-    head.value = '<style type="text/css">\n' + sitestyle + '\n</style>';
-    head.value += '<script type="text/javascript">\n' + sitescript.toString() + '\n</script>';
+    head.value = '<style type="text/css">\n' + sitestyle + '\n</style>\n';
+    head.value += '<script type="text/javascript">\n' + sitescript.toString().slice(14,-1) + '\n</script>';
+
+    status.html('Ready...');
 
     file.change(function(event) {
       status.html('Please wait...');
