@@ -6,7 +6,7 @@
 // @include     http://cms.ku.dk/admin/nat-sites/nbi-sites/cik/ansatte/?*
 // @require     http://cms.ku.dk/jquery/1.8.3/jquery-1.8.3.min.js
 
-// @version     0.50
+// @version     0.51
 // ==/UserScript==
 
 var sitestyle = ' \
@@ -17,22 +17,24 @@ var sitescript = function() {
 $(document).ready(
   function() {
     // Containing div
-    var staff = $('#staff');
+    var staff = $("#staff");
     // All "business cards" have this class
-    var bcards = $('.business-card');
+    var bcards = $(".business-card");
 
     // Generate a list of tags used in the document and sort them
     var tags = [];
-    var tmptags = staff.find('.tags li')
+    var tmptags = staff.find(".tags li")
       .map(function() {
         return this.textContent;
       })
       .sort();
 
     // Remove duplicates
-    for (var i = 0; i < tmptags.length; i++)
-      if (tags && tags[tags.length-1] != tmptags[i])
-        tags.push(tmptags[i])
+    for (var i = 0; i < tmptags.length; i++) {
+      if (tags && tags[tags.length-1] != tmptags[i]) {
+        tags.push(tmptags[i]);
+      }
+    }
 
     // Create the tag selection box
     var searchbox = $('<div class="filter"><h2>Filter</h2><p>Use the following tags to filter the list of employees.</p><ul class="tags"></ul></div>');
@@ -58,7 +60,7 @@ $(document).ready(
         .reduce(
           function (acc,x) {
             if (x.querySelector('input').checked) {
-              return acc.concat(x.querySelector('input').value)
+              return acc.concat(x.querySelector('input').value);
             } else {
               return acc;
             }
@@ -111,9 +113,7 @@ $(document).ready(
 
 		     this.each(function(idx)
 		               {
-			               var supported = $(this).prop('tagName').toUpperCase() == "INPUT"
-							         && $(this).attr('type') == "file"
-							         && window.FileReader;
+			               var supported = $(this).prop('tagName').toUpperCase() == "INPUT" && $(this).attr('type') == "file" && window.FileReader;
 
 			               if (!supported)
 				               return true;	// continue to next input element
@@ -295,7 +295,7 @@ $(document).ready(
 				     reader.readAsText(file.slice(start, Math.min(start + settings.chunkSize, file.size)), settings.config.encoding);
 				     start += settings.chunkSize;
 			     }
-		     };
+		     }
 	     }
 
 	     // Parser is the actual parsing component.
@@ -388,8 +388,7 @@ $(document).ready(
 			     if (typeof config !== 'object')
 				     config = {};
 
-			     if (typeof config.delimiter !== 'string'
-				       || config.delimiter.length != 1)
+			     if (typeof config.delimiter !== 'string' || config.delimiter.length != 1)
 				     config.delimiter = _defaultConfig.delimiter;
 
 			     if (config.delimiter == '"' || config.delimiter == "\n")
@@ -808,7 +807,7 @@ $(document).ready(
 
     // Function for rendering information (an array of people) to DOM.
     var render = function(people) {
-      var result = '<h1>Team members</h1><p>På denne side findes oplysninger om personalet på Center for Is og Klima. En liste over centerpartnere og andre tilknyttede, der ikke har deres faglige gang på centeret, finder <a href="http://www.iceandclimate.nbi.ku.dk/staff/affiliates2/">her (engelsk side)</a>.</p><div id="staff"> <ul>';
+      var result = '<div id="staff"> <ul>';
 
       var person;
 
@@ -822,7 +821,13 @@ $(document).ready(
           result += '<div class="photo"><img src="' + imgBasePath + person.picture.replace(" ", "_") + '" title="' + person.name + '" alt="Picture of ' + person.name + '" /> </div> ';
         }
 
-        result += '<h1><a href="http://www.isogklima.nbi.ku.dk/ansatte/?id={{ person.kuid }}&vis=medarbejder">' + person.name + '</a></h1>';
+        result += '<h1>';
+
+        if (person.kuid) {
+          result += '<a href="http://www.isogklima.nbi.ku.dk/ansatte/?id=' + person.kuid + '&vis=medarbejder">' + person.name + '</a>';
+        } else {
+          result += person.name + '</h1>';
+        }
 
         if (person.title) {
           result += '<h2>' +  person.title + '</h2>';
