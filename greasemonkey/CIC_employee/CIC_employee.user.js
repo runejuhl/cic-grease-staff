@@ -6,7 +6,7 @@
 // @include     http://cms.ku.dk/admin/nat-sites/nbi-sites/cik/ansatte/?*
 // @require     http://cms.ku.dk/jquery/1.8.3/jquery-1.8.3.min.js
 
-// @version     0.51
+// @version     0.54
 // ==/UserScript==
 
 var sitestyle = ' \
@@ -824,7 +824,7 @@ $(document).ready(
         result += '<h1>';
 
         if (person.kuid) {
-          result += '<a href="http://www.isogklima.nbi.ku.dk/ansatte/?id=' + person.kuid + '&vis=medarbejder">' + person.name + '</a>';
+          result += '<a href="http://www.nbi.ku.dk/ansatte/?pure=en/persons/' + person.kuid + '">' + person.name + '</a>';
         } else {
           result += person.name + '</h1>';
         }
