@@ -1,0 +1,11 @@
+* CIC Greasemonkey staff page thing
+
+This is a Greasemonkey script to generate a better-looking and dynamic staff
+page for Centre for Ice and Climate.
+
+It's developed around 2014 and is basically a hack that allows a non-technical
+person to be able to update the staff page in the CMS by "uploading" a CSV to
+the running Greasemonkey extension which spits out a HTML/JS blob.
+
+The repo also contains some attempts at automating the process, but I'm pretty
+sure it never got into a working state.
