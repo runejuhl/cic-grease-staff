@@ -1,6 +1,12 @@
 [submodule "service/jquery.parse"]
-	path = service/static/jquery.parse
-	url = git@github.com:mholt/jquery.parse.git
+    path = service/static/jquery.parse
+    url = git@github.com:mholt/jquery.parse.git
 [submodule "service/static/Tidy-Table"]
-	path = service/static/Tidy-Table
-	url = git@github.com:nuxy/Tidy-Table.git
+    path = service/static/Tidy-Table
+    url = git@github.com:nuxy/Tidy-Table.git
+[submodule "greasemonkey/CIC_employee/jquery.parse"]
+    path = greasemonkey/CIC_employee/jquery.parse
+    url = git@github.com:mholt/jquery.parse.git
+[submodule "greasemonkey/CIC_employee/Tidy-Table"]
+    path = greasemonkey/CIC_employee/Tidy-Table
+    url = git@github.com:nuxy/Tidy-Table.git
