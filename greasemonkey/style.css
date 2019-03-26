@@ -1,0 +1,109 @@
+/* #staff li { */
+/*     border: 1px solid grey; */
+/* } */
+
+#staff li {
+  line-height: 1em !important;
+  list-style: none;
+}
+
+.business-card img {
+  float: right;
+  max-height: 12em;
+  width: auto;
+}
+
+.business-card ul.contact {
+  padding: 0;
+}
+
+.business-card ul.contact li {
+  margin-bottom: 0.4em;
+}
+
+li.business-card {
+  padding: 1em;
+  border-bottom: 1px solid #ccc;
+  overflow: hidden;
+  line-height: 1em !important;
+}
+
+.business-card h1, .business-card h2 {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.business-card h2 {
+  margin-bottom: 1em !important;
+  margin-top: 0.5em !important;
+}
+.filter .tags input {
+  margin: 0;
+}
+
+ul.tags {
+  padding: 0 0 0.5em 0;
+}
+
+ul.tags li {
+  display: inline;
+  border: 1px solid black;
+  border-radius: 0.5em;
+  margin: 0 0.3em;
+  padding: 0.3em;
+  /* cursor: pointer; */
+}
+
+ul.tags li label {
+  user-select: none;
+}
+
+.toggled {
+  background-color: rgba(100, 100, 250, 0.49); /* rgba(247, 245, 0, 0.53); */
+}
+
+.hidden {
+  display: none;
+}
+
+.row-wrapper {
+  display: block;
+}
+
+.column {
+  float: left;
+}
+
+.column.info {
+  width: 300px;
+}
+
+.column.description {
+  /* margin-left: 300px; */
+  width: 300px;
+  line-height: 1.3;
+  padding-bottom: 0.8em;
+}
+
+.photo {
+  float: right !important;
+}
+
+#staff ul.contact > li {
+  font-weight: bold;
+}
+
+#staff ul.contact > li * {
+  font-weight: normal;
+}
+
+#staff ul.contact ul {
+  padding-left: 2em;
+  padding-top: 0.4em;
+}
+
+#staff ul.contact ul li {
+  list-style-type: disc;
+}

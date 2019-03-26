@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<head>
+  <script type="text/javascript" src="static/jquery-2.0.3.js"></script>
+  <script type="text/javascript" src="static/jquery.parse/jquery.parse.js"></script>
+  <script type="text/javascript" src="static/Tidy-Table/jquery.tidy.table.min.js"></script>
+
+  <script type="text/javascript" src="static/upload.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="static/Tidy-Table/jquery.tidy.table.min.css" />
+  <title>Employees at CIC</title>
+</head>
+<body>
+  <form action="" method="post" id="people">
+    <div>
+      <label for="file">Select the .csv file: <input id="file" name="file" type="file" accept=".csv" /></label>
+    </div>
+    <div>
+      <input id="update" type="submit" value="Update">
+    </div>
+    <div id="status">
+    </div>
+    <div id="error">
+    </div>
+  </form>
+
+  <div id="table"> </div>
+</body>
+</html>

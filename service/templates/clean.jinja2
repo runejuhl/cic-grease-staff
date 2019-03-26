@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<head>
+  <title>Employees at CIC</title>
+</head>
+<body>
+  <form>
+    <table>
+      <thead>
+        <tr>
+          <td>Name</td>
+          <td>Title</td>
+          <td>Phone</td>
+          <td>Email</td>
+          <td>Address</td>
+          <td>Description</td>
+          <td>Homepage</td>
+          <td>Picture</td>
+          <td>KU id</td>
+          <td>Tag</td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for person in persons %}
+          <tr>
+            <td><input type="text" placeholder="Name" value="{{ person.name }}" /></td>
+            <td><input type="text" placeholder="Title" value="{{ person.title }}" /></td>
+            <td><input type="text" placeholder="Phone" value="{{ person.phone }}" /></td>
+            <td><input type="text" placeholder="Email" value="{{ person.email }}" /></td>
+            <td><textarea placeholder="Address">{{ person.address }}</textarea></td>
+            <td><textarea placeholder="Description">{{ person.description }}</textarea></td>
+            <td><input type="text" placeholder="Homepage" value="{{ person.homepage }}"/></td>
+            <td><input type="text" placeholder="Picture" value="{{ person.picture }}"/></td>
+            <td><input type="text" placeholder="KU ID" value="{{ person.kuid }}"/></td>
+            <td><input type="text" placeholder="Tag" value="{{ person.tags }}"/></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </form>
+</body>
+</html>
